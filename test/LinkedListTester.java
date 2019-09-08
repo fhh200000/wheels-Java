@@ -8,12 +8,13 @@ import java.io.ObjectOutputStream;
 import defs.Contact;
 import lang.SeqList;
 import lang.SingleLinkedList;
+import lang.SortedSeqList;
 import lang.SortedSingleLinkedList;
 import lang.Node;
 @SuppressWarnings("unused")
 public class LinkedListTester {
 	public static void main(String[] args) {
-		SingleLinkedList<Contact> test = new SingleLinkedList<Contact>(
+		SingleLinkedList<Contact> test = new SortedSingleLinkedList<Contact>(
 				new Contact[] { 
 						new Contact("fhh", "123456"),
 						new Contact("szh", "10086"), 
@@ -60,9 +61,14 @@ public class LinkedListTester {
 			ObjectInputStream ois = new ObjectInputStream(
 					new FileInputStream(System.getProperty("java.class.path") + "/tstlink.info"));
 			@SuppressWarnings("unchecked")
-			SingleLinkedList<Contact> testcontacts = new SingleLinkedList<Contact>((SeqList<Contact>) ois.readObject());
-			System.out.println("If we are reading from SortedSingleLinkedList file: "
-					+ Boolean.toString(testcontacts instanceof SortedSingleLinkedList));
+			SeqList<Contact> test2 = (SeqList<Contact>) ois.readObject();
+			System.out.println("If we are reading from SortedSeqList file: "
+					+ Boolean.toString(test2 instanceof SortedSeqList));
+			SingleLinkedList<Contact> testcontacts;
+			if(test2 instanceof SortedSeqList)
+				testcontacts = new SortedSingleLinkedList<Contact>(test2);
+			else
+				testcontacts = new SingleLinkedList<Contact>(test2);
 			System.out.println("Imported data from file:" + testcontacts.toString());
 			ois.close();
 		} catch (Exception ex) {

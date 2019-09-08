@@ -13,6 +13,9 @@ public class SingleLinkedList<T> {
 			curr = curr.next;
 		}
 	}
+	public SingleLinkedList(SingleLinkedList<T> in) {
+		this(in.toSeqList().toArray());
+	}
 	public SingleLinkedList(SeqList<T> in) {
 		this(in.toArray());
 	}
@@ -88,7 +91,7 @@ public class SingleLinkedList<T> {
 		Node<T> curr = head;
 		for(int i=0;curr.next!=null&&i<pos;i++)
 			curr = curr.next;
-		if(pos>=0 && head.next!=null) {
+		if(pos>=0 && curr.next!=null) {
 			T ret = curr.next.data;
 			curr.next = curr.next.next;
 			return ret;
