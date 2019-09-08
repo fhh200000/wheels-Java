@@ -1,4 +1,5 @@
 package lang;
+
 public class SingleLinkedList<T> {
 	public Node<T> head;
 	public SingleLinkedList() {
@@ -75,11 +76,53 @@ public class SingleLinkedList<T> {
 		Node<T> curr = this.head;
 		if(pos<0)
 			pos = 0;
-		for(int i=0;i<pos&&(curr=curr.next)!=null;i++);
+		for(int i=0;i<pos&&curr.next!=null;i++)
+			curr = curr.next;
 		curr.next = new Node<T>(data,curr.next);
 		return curr.next;
 	}
 	public Node<T> append(T data) {
 		return insert(Integer.MAX_VALUE,data);
+	}
+	public T remove(int pos) {
+		Node<T> curr = head;
+		for(int i=0;curr.next!=null&&i<pos;i++)
+			curr = curr.next;
+		if(pos>=0 && head.next!=null) {
+			T ret = curr.next.data;
+			curr.next = curr.next.next;
+			return ret;
+		}
+		return null;
+	}
+	public void clear() {
+		head.next = null;
+	}
+	public Node<T> search(T key){
+		if(key==null)
+			return null;
+		Node<T> curr=head.next;
+		while(curr.next!=null&&!(curr.data.equals(key))) 
+			curr = curr.next;
+		if(!(curr.data.equals(key)))
+			return null;
+		return curr;
+	}
+	public boolean contains(T key) {
+		return search(key)!=null;
+	}
+	public Node<T> insertDifferent(T indata) {
+		if(contains(indata))
+			return null;
+		return append(indata);	
+	}
+	public T remove(T key) {
+		int count=0;
+		Node<T> data = search(key),curr=head.next;
+		while(curr.next!=null&&!(curr.data.equals(data))) {
+			curr = curr.next;
+			count++;
+		}
+		return remove(count);
 	}
 }

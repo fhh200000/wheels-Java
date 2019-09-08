@@ -9,7 +9,8 @@ import defs.Contact;
 import lang.SeqList;
 import lang.SingleLinkedList;
 import lang.SortedSingleLinkedList;
-
+import lang.Node;
+@SuppressWarnings("unused")
 public class LinkedListTester {
 	public static void main(String[] args) {
 		SingleLinkedList<Contact> test = new SingleLinkedList<Contact>(
@@ -67,5 +68,25 @@ public class LinkedListTester {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		//测试插入
+		test.insert(3,new Contact("hzc","130333"));
+		System.out.println("Insert test:"+test);
+		//测试附加
+		test.append(new Contact("dzy","123132"));
+		System.out.println("Append test:"+test);
+		//测试移除
+		test.remove(0);
+		System.out.println("Remove test:"+test);
+		//测试查找
+		System.out.println("Search result of (hzc,130333) is:"+test.search(new Contact("hzc","130333")));
+		System.out.println("Search result of (hzc,130) is:"+test.search(new Contact("hzc","130")));
+		//测试不重复插入
+		System.out.println("Exclusive insert of redundant data (hzc,130333) is:"+test.insertDifferent(new Contact("hzc","130333")));
+		System.out.println("Exclusive insert of normal data (hzc,130) is:"+test.insertDifferent(new Contact("hzc","130")));
+		//测试删除
+		test.remove(new Contact("hzc","130"));
+		System.out.println("Remove normal data (hzc,130) is:"+test);
+		//完成测试：
+		System.out.println("Finished test.");
 	}
 }
