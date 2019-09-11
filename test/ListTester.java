@@ -9,7 +9,6 @@ import java.io.ObjectOutputStream;
 import defs.Contact;
 class ListTester {
 	public static void main(String[] args) {
-		// TODO 自动生成的方法存根
 		Contact contacts[] = new Contact[] {
 				new Contact("fhh","123456"),
 				new Contact("szh","10086"),
@@ -26,26 +25,32 @@ class ListTester {
 		test.set(2,tmp);
 		System.out.println("Replace out:"+test);
 		//测试替换警告位（数位小于0)
+		System.out.print("Replace with negative pos:");
 		try {
 			test.set(-1,tmp);
 		}
 		catch(ArrayIndexOutOfBoundsException ex) {
-			System.out.println("Replace with negative pos: "+ex.toString());
+			System.out.print(ex.toString());
 		}
+		System.out.println();
 		//测试替换警告位（数位大于长度)
+		System.out.print("Replace with exceeded pos:");
 		try {
 			test.set(test.size(),tmp);
 		}
 		catch(ArrayIndexOutOfBoundsException ex) {
-			System.out.println("Replace with exceeded pos: "+ex.toString());
+			System.out.print(ex.toString());
 		}
+		System.out.println();
 		//测试替换警告位（无效内容)
+		System.out.print("Insert with null data: ");
 		try {
 			test.set(0,null);
 		}
 		catch(NullPointerException ex) {
-			System.out.println("Insert with null data: "+ex.toString());
+			System.out.print(ex.toString());
 		}
+		System.out.println();
 		//测试导出到文件
 		ObjectOutputStream oos;
 		try {
