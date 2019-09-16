@@ -13,8 +13,12 @@ public class SortedSingleLinkedList<T extends Comparable<? super T>> extends Sin
 	public SortedSingleLinkedList(SortedSingleLinkedList<T> in) {
 		super(in);
 	}
+	@SuppressWarnings("unchecked")
 	public SortedSingleLinkedList(SeqList<T> in) {
-		super(in);
+		super();
+		for(int i=0;i<in.length;i++) {
+			this.insert((T)in.data[i]);
+			}
 	}
 	public SortedSingleLinkedList(SingleLinkedList<T> in) {
 		super();
@@ -44,6 +48,11 @@ public class SortedSingleLinkedList<T extends Comparable<? super T>> extends Sin
 	}
 	public Node<T> insert(T data) {
 		Node<T> front = head,curr = head.next;
+		//如果链表为空，那么直接插入
+		if(curr==null) {
+			head.next = new Node<T>(data,curr);
+			return curr;
+		}
 		while(curr!=null&&data.compareTo(curr.data)>0)
 		{
 			front = curr;

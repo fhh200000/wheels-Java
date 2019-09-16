@@ -8,6 +8,19 @@ public class SortedSeqList<T extends Comparable<? super T>> extends SeqList<T> {
 	public SortedSeqList(int length) {
 		super(length);
 	}
+	@SuppressWarnings("unchecked")
+	public SortedSeqList(SeqList<T> indata) {
+		super(indata.length);
+		//如果已经为排序表，则直接执行拷贝
+		if(indata instanceof SortedSeqList) {
+			this.data = indata.data;
+		}
+		//如果不是，则在导入时进行转化
+		else {
+			for(Object i:indata.data)
+				insert((T)i);
+		}
+	}
 	public SortedSeqList(T[] data) {
 		super(data.length);
 		//在此处直接执行插入
