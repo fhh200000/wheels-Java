@@ -17,8 +17,9 @@ public class SortedSeqList<T extends Comparable<? super T>> extends SeqList<T> {
 		}
 		//如果不是，则在导入时进行转化
 		else {
-			for(Object i:indata.data)
-				insert((T)i);
+			for(int i=0;i<indata.length;i++) {
+				this.insert((T)indata.data[i]);
+			}
 		}
 	}
 	public SortedSeqList(T[] data) {

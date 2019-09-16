@@ -89,8 +89,12 @@ public class SingleLinkedList<T> {
 	}
 	public T remove(int pos) {
 		Node<T> curr = head;
-		for(int i=0;curr.next!=null&&i<pos;i++)
+		int i;
+		for(i=0;curr.next!=null&&i<pos;i++)
 			curr = curr.next;
+		//若未找到，返回null
+		if(i!=pos)
+			return null;
 		if(pos>=0 && curr.next!=null) {
 			T ret = curr.next.data;
 			curr.next = curr.next.next;
@@ -122,7 +126,9 @@ public class SingleLinkedList<T> {
 	public T remove(T key) {
 		int count=0;
 		Node<T> data = search(key),curr=head.next;
-		while(curr.next!=null&&!(curr.data.equals(data))) {
+		if(data==null)
+			return null;
+		while(curr.next!=null&&!(curr.equals(data))) {
 			curr = curr.next;
 			count++;
 		}

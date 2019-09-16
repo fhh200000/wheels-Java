@@ -18,7 +18,7 @@ public class SortedSingleLinkedList<T extends Comparable<? super T>> extends Sin
 		super();
 		for(int i=0;i<in.length;i++) {
 			this.insert((T)in.data[i]);
-			}
+		}
 	}
 	public SortedSingleLinkedList(SingleLinkedList<T> in) {
 		super();
