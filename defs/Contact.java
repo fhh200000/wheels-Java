@@ -17,7 +17,7 @@ public class Contact implements Serializable/*支持序列化从而实现导入/
 	}
 	@Override
 	public String toString() {
-		return String.format("(Name:%s,Phone:%s)",name,phone);
+		return String.format("%s\t%s",name,phone);
 	}
 	public UUID getUuid() {
 		return uuid;
