@@ -1,6 +1,8 @@
 package lang;
 
-public class SingleLinkedList<T> {
+import java.util.Iterator;
+
+public class SingleLinkedList<T> implements Iterable<T>/*使用迭代器，遍历算法O(n²)-->O(n)*/{
 	public Node<T> head;
 	public SingleLinkedList() {
 		this.head = new Node<T>();
@@ -124,7 +126,7 @@ public class SingleLinkedList<T> {
 		return append(indata);	
 	}
 	public T remove(T key) {
-		int count=0;
+		/*int count=0;
 		Node<T> data = search(key),curr=head.next;
 		if(data==null)
 			return null;
@@ -132,6 +134,41 @@ public class SingleLinkedList<T> {
 			curr = curr.next;
 			count++;
 		}
-		return remove(count);
+		return remove(count);*/
+		//使用迭代器实现的版本。
+		Iterator<T> iter = iterator();
+		T ret = null,tmp=null;
+		while(iter.hasNext()) {
+			tmp = iter.next();
+			if(tmp.equals(key)) {
+				ret = tmp;
+				iter.remove();
+			}
+		}
+		return ret;
+	}
+	@Override
+	public Iterator<T> iterator() {
+		// TODO 自动生成的方法存根
+		return new LinkedListIterator();
+	}
+	private class LinkedListIterator implements Iterator<T>{
+		private Node<T> curr = head;
+		private Node<T> prev = head;
+		@Override
+		public boolean hasNext() {
+			return curr.next!=null;
+		}
+		@Override
+		public T next() {
+			// TODO 自动生成的方法存根
+			prev = curr;
+			curr = curr.next;
+			return curr.data;
+		}
+		@Override
+		public void remove() {
+			prev.next =prev.next.next;
+		}
 	}
 }

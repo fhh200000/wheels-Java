@@ -90,8 +90,8 @@ public class LinkedListTester {
 		System.out.println("Exclusive insert of redundant data (hzc,130333) is:"+test.insertDifferent(new Contact("hzc","130333")));
 		System.out.println("Exclusive insert of normal data (hzc,130) is:"+test.insertDifferent(new Contact("hzc","130")));
 		//测试删除
-		test.remove(new Contact("hzc","130"));
-		System.out.println("Remove normal data (hzc,130) is:"+test);
+		test.remove(new Contact("fhh","123456"));
+		System.out.println("Remove normal data (fhh,123456) is:"+test);
 		//完成测试：
 		System.out.println("Finished test.");
 	}

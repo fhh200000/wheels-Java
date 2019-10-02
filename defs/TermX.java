@@ -22,13 +22,23 @@ public class TermX implements Comparable<TermX>, Addible<TermX> {
 			xexp = 0;
 			return;
 		}
-		//若b不等于0,则按照表达式"x^"/"X^"切分。
+		//若用户未输入次数,则不读取次数
+		if(!Character.isDigit(termstr.charAt(termstr.length()-1))) {
+			coef = 1;
+			xexp = 1;
+			return;
+		}
+		//若b不等于0且b不等于1,则按照表达式"x^"/"X^"切分。
 		String[] result;
 		if(termstr.indexOf('x')==-1) //大写X
 			result = termstr.split("X\\^");
 		else //小写X
 			result = termstr.split("x\\^");
-		coef = Integer.valueOf(result[0]);
+		//如果未输入常数，则默认为1.
+		if(!result[0].equals(""))
+			coef = Integer.valueOf(result[0]);
+		else
+			coef = 1;
 		xexp = Integer.valueOf(result[1]);
 	}
 	@Override
@@ -36,7 +46,12 @@ public class TermX implements Comparable<TermX>, Addible<TermX> {
 		StringBuilder sb = new StringBuilder();
 		if(coef>0)
 			sb.append('+');
-		sb.append(coef);
+		//如果系数为1次，那么不显示系数。
+		if(Math.abs(coef)!=1)
+			sb.append(coef);
+		else 
+			if(coef<0)
+				sb.append('-');
 		//如果次数为0次，那么不显示未知数x。
 		if(xexp!=0) {
 			sb.append('x');
@@ -45,6 +60,9 @@ public class TermX implements Comparable<TermX>, Addible<TermX> {
 			return sb.toString();
 		}
 		//将次数转化成上标。
+		//如果次数为1,那么无需显示上标。
+		if(xexp==1)
+			return sb.toString();
 		//如果次数为负，那么加入上标-。
 		if(xexp<0)
 			sb.append(expnegative);
@@ -67,15 +85,21 @@ public class TermX implements Comparable<TermX>, Addible<TermX> {
 		return term.xexp - this.xexp;
 	}
 	@Override
-	public void add(TermX x) {
-		// TODO 自动生成的方法存根
+	public boolean add(TermX x) {
+		/*
+		 * 对教材示例代码的微小改动。
+		 * 在添加成功后返回一个boolean类型的变量以通知“添加成功”。
+		 * 如果次数不一致，则返回“添加失败”。
+		 */
+		boolean result=false;
 		if(x.xexp==this.xexp) {
-			this.xexp+=x.xexp;
+			this.coef+=x.coef;
+			result = true;
 		}
+		return result;
 	}
 	@Override
 	public boolean removable() {
-		// TODO 自动生成的方法存根
-		return false;
+		return this.coef==0;
 	}
 }
