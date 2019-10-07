@@ -28,5 +28,9 @@ public class PolynomialTester {
 						});
 		a.add(c);
 		System.out.println("add negative(minus) test:"+a);
+		Polynomial d = new Polynomial("X^20+4X^54-2X^33-3");
+		System.out.println("String constructor(X^20+4X^54-2X^33-3) test:"+d);
+		//完成测试：
+		System.out.println("Finished test.");
 	}
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 import defs.TermX;
+import lang.SortedSeqList;
 import lang.SortedSingleLinkedList;
 
 public class Polynomial implements Serializable {
@@ -24,14 +25,30 @@ public class Polynomial implements Serializable {
 	public Polynomial(TermX[] in) {
 		this.data = new SortedSingleLinkedList<TermX>(in);
 	}
+	public Polynomial(SortedSeqList<TermX> in) {
+		this.data = new SortedSingleLinkedList<TermX>(in);
+	}
+	public Polynomial(String in) {
+		this();
+		//将分割符添加至+/-的前面。
+		in = in.replaceAll("\\+", "|+");
+		in = in.replaceAll("-", "|-");
+		String splited[] = in.split("\\|");
+		for(String i:splited) {
+			if(!i.equals(""))
+				data.append(new TermX(i));
+			}
+	}
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for(TermX i:data)
 			sb.append(i);
 		//如果起始数据为'+'，那么删除开头
-		if(sb.charAt(0)=='+')
-			sb.delete(0, 1);
+		if(sb.length()>0) {
+			if(sb.charAt(0)=='+')
+				sb.delete(0, 1);
+		}
 		return sb.toString();
 	}
 	public void add(Polynomial in) {

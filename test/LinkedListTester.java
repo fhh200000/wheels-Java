@@ -23,6 +23,7 @@ public class LinkedListTester {
 				}
 		);
 		System.out.println("Direct out:" + test);
+		System.out.println("Size:" + test.size());
 		// 替换某位
 		Contact tmp = new Contact("lhb", "10000");
 		test.set(2, tmp);
@@ -92,6 +93,8 @@ public class LinkedListTester {
 		//测试删除
 		test.remove(new Contact("fhh","123456"));
 		System.out.println("Remove normal data (fhh,123456) is:"+test);
+		test.remove(new Contact("wx","10010"));
+		System.out.println("Remove normal data (wx,10010) is:"+test);
 		//完成测试：
 		System.out.println("Finished test.");
 	}

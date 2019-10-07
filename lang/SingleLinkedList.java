@@ -2,7 +2,7 @@ package lang;
 
 import java.util.Iterator;
 
-public class SingleLinkedList<T> implements Iterable<T>/*使用迭代器，遍历算法O(n²)-->O(n)*/{
+public class SingleLinkedList<T> implements Iterable<T>/*使用迭代器*/{
 	public Node<T> head;
 	public SingleLinkedList() {
 		this.head = new Node<T>();
@@ -49,13 +49,24 @@ public class SingleLinkedList<T> implements Iterable<T>/*使用迭代器，遍�
 		curr.data = data;
 	}
 	public int size() {
-		Node<T> curr = this.head.next;
+		/* 使用迭代器的重构版本。
+		 * 性能与原实现无明显差异，可支持循环单链表的正确识别。
+		 * Node<T> curr = this.head.next;
 		int tmp=0;
 		while(curr!=null) {
 			curr = curr.next;
 			++tmp;
 		}
-		return tmp;
+		return tmp;*/
+		int ret=0;
+		T headdata = head.next.data;
+		Iterator<T> iter = iterator();
+		while(iter.hasNext()) {
+			if(iter.next()==headdata&&ret!=0)
+				break;
+			ret++;
+		}
+		return ret;
 	}
 	@Override
 	public String toString() {
@@ -126,7 +137,8 @@ public class SingleLinkedList<T> implements Iterable<T>/*使用迭代器，遍�
 		return append(indata);	
 	}
 	public T remove(T key) {
-		/*int count=0;
+		/* 未使用迭代器时的版本。
+		 * int count=0;
 		Node<T> data = search(key),curr=head.next;
 		if(data==null)
 			return null;
@@ -143,6 +155,7 @@ public class SingleLinkedList<T> implements Iterable<T>/*使用迭代器，遍�
 			if(tmp.equals(key)) {
 				ret = tmp;
 				iter.remove();
+				return ret;
 			}
 		}
 		return ret;

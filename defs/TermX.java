@@ -1,8 +1,11 @@
 package defs;
 
+import java.io.Serializable;
+
 import lang.Addible;
 
-public class TermX implements Comparable<TermX>, Addible<TermX> {
+public class TermX implements Comparable<TermX>, Addible<TermX>,Serializable {
+	private static final long serialVersionUID = 1L;
 	public static final String expdigits="⁰¹²³⁴⁵⁶⁷⁸⁹";
 	public static final char expnegative='⁻';
 	protected int coef,xexp;
@@ -22,9 +25,18 @@ public class TermX implements Comparable<TermX>, Addible<TermX> {
 			xexp = 0;
 			return;
 		}
+		//若用户未输入常数，则按照1处理。
+		if(termstr.charAt(0)=='x'||termstr.charAt(0)=='X')
+			termstr = '1'+termstr;
+		//同样地，对-x进行处理。
+		if(termstr.charAt(0)=='-'&&(termstr.charAt(1)=='x'||termstr.charAt(1)=='X'))
+			termstr = "-1"+termstr.substring(1);
 		//若用户未输入次数,则不读取次数
 		if(!Character.isDigit(termstr.charAt(termstr.length()-1))) {
-			coef = 1;
+			if(termstr.indexOf('x')==-1) //大写X
+				coef = Integer.valueOf(termstr.split("X")[0]);
+			else
+				coef = Integer.valueOf(termstr.split("x")[0]);
 			xexp = 1;
 			return;
 		}
@@ -35,10 +47,10 @@ public class TermX implements Comparable<TermX>, Addible<TermX> {
 		else //小写X
 			result = termstr.split("x\\^");
 		//如果未输入常数，则默认为1.
-		if(!result[0].equals(""))
+		if(!(result[0].equals("")||result[0].equals("+")||result[0].equals("-")))
 			coef = Integer.valueOf(result[0]);
 		else
-			coef = 1;
+			coef = result[0].equals("+")?1:-1;
 		xexp = Integer.valueOf(result[1]);
 	}
 	@Override
@@ -46,8 +58,8 @@ public class TermX implements Comparable<TermX>, Addible<TermX> {
 		StringBuilder sb = new StringBuilder();
 		if(coef>0)
 			sb.append('+');
-		//如果系数为1次，那么不显示系数。
-		if(Math.abs(coef)!=1)
+		//如果系数为1次且次数不为0，那么不显示系数。
+		if(Math.abs(coef)!=1||xexp==0)
 			sb.append(coef);
 		else 
 			if(coef<0)
