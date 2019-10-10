@@ -95,8 +95,8 @@ public class PolynomialProvider {
 			case 'a':case 'A':{
 				System.out.println("请输入需要运算的多项式字符串：");
 				Polynomial indata = new Polynomial(sc.next());
+				System.out.print("多项式("+indata+")+("+data+"),");
 				data.add(indata);
-				System.out.println("多项式运算成功！");
 				System.out.println("结果为："+data);
 				break;
 			}

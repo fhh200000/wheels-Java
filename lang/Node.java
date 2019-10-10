@@ -6,6 +6,10 @@ public class Node<T> {
 		this.data = data;
 		this.next = next;
 	}
+	public Node(Node<T> in) {
+		this.data = in.data;
+		this.next = in.next;
+	}
 	public Node() {
 		this(null,null);
 	}

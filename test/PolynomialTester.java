@@ -15,6 +15,7 @@ public class PolynomialTester {
 						new TermX("-2X^20"),
 						new TermX("-2X^54"),
 						new TermX("2X^33"),
+						new TermX("2X^8"),
 						new TermX("2x"),
 						});
 		a.add(b);

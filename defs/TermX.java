@@ -8,7 +8,7 @@ public class TermX implements Comparable<TermX>, Addible<TermX>,Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String expdigits="⁰¹²³⁴⁵⁶⁷⁸⁹";
 	public static final char expnegative='⁻';
-	protected int coef,xexp;
+	public int coef,xexp;
 	public TermX(int coef,int xexp) {
 		this.coef = coef;
 		this.xexp = xexp;
@@ -35,8 +35,13 @@ public class TermX implements Comparable<TermX>, Addible<TermX>,Serializable {
 		if(!Character.isDigit(termstr.charAt(termstr.length()-1))) {
 			if(termstr.indexOf('x')==-1) //大写X
 				coef = Integer.valueOf(termstr.split("X")[0]);
-			else
-				coef = Integer.valueOf(termstr.split("x")[0]);
+			else {
+				String data=termstr.split("x")[0];
+				if(!data.equals("+"))
+					coef = Integer.valueOf(data);
+				else
+					coef = 1;
+				}
 			xexp = 1;
 			return;
 		}

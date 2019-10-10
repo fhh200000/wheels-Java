@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 import defs.TermX;
+import lang.Node;
 import lang.SortedSeqList;
 import lang.SortedSingleLinkedList;
 
@@ -52,6 +53,9 @@ public class Polynomial implements Serializable {
 		return sb.toString();
 	}
 	public void add(Polynomial in) {
+		/*
+		 * 使用书本示例写法的重构版本。
+		 * 注释中使用的算法采用两重迭代的算法，效率较低。
 		//对两个多项式对象进行遍历。O(n²)
 		//这里使用迭代器进行操作。
 		Iterator<TermX> inIter = in.getData().iterator();
@@ -66,6 +70,42 @@ public class Polynomial implements Serializable {
 			this.data.append(inData);
 		}
 		//完成后，对多项式进行去0操作。
+		trim();
+		* 此处使用书本提供的写法。
+		*/
+		Node<TermX> thispointer = this.data.head.next,thispointerprev = this.data.head,inpointer = in.data.head.next;
+		while(thispointer!=null&&inpointer!=null) {
+			if(thispointer.data.add(inpointer.data)) { //可以添加，则直接添加
+				thispointerprev = thispointer;
+				thispointer = thispointer.next;
+				inpointer = inpointer.next;
+				continue;
+			}
+			if(thispointer.data.xexp>inpointer.data.xexp) {
+				thispointerprev = thispointer;
+				thispointer = thispointer.next;
+				continue;
+			}
+			if(thispointer.data.xexp<inpointer.data.xexp) {
+				//深度复制节点。
+				//Java的泛型看起来不能实例化一个类型T的对象……
+				Node<TermX> insertdata = new Node<TermX>(new TermX(inpointer.data.coef,inpointer.data.xexp),inpointer.next);
+				thispointerprev.next = insertdata;
+				insertdata.next = thispointer;
+				thispointerprev = insertdata;
+				inpointer = inpointer.next;
+				continue;
+			}
+		}
+		//结束，将剩余信息的尾部连接到原链表。
+		while(inpointer!=null) {
+			Node<TermX> appenddata = new Node<TermX>(new TermX(inpointer.data.coef,inpointer.data.xexp),inpointer.next);
+			thispointerprev.next = appenddata;
+			appenddata.next = thispointer;
+			thispointerprev = appenddata;
+			inpointer = inpointer.next;
+		}
+		//最后去除运算过程中产生的0.
 		trim();
 	}
 	public void trim() {
@@ -86,7 +126,6 @@ public class Polynomial implements Serializable {
 			}
 		 * 现在使用的是迭代器版本。
 		 */
-		
 		for(TermX i:data)
 			if(i.removable())
 				this.data.remove(i);
