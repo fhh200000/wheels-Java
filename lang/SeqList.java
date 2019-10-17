@@ -1,11 +1,13 @@
 package lang;
 
 import java.io.Serializable;
-public class SeqList<T> implements Serializable /*支持序列化从而实现导入/导出*/{
+import java.util.Iterator;
+
+public class SeqList<T> implements Serializable,Iterable<T> /*支持序列化从而实现导入/导出*/{
 	private static final long serialVersionUID = 1L;
 	protected Object[] data; 
 	private static final int DEFAULT_LENGTH = 64; /*默认长度为64位*/
-	protected int length;
+	int length;
 	public SeqList(int len){
 		this.data = new Object[len];
 		this.length = 0;
@@ -131,5 +133,23 @@ public class SeqList<T> implements Serializable /*支持序列化从而实现导
 		T[] tmp = (T[]) new Object[length];
 		System.arraycopy(data,0,tmp,0,length);
 		return (T[])tmp;
+	}
+	@Override
+	public Iterator<T> iterator() {
+		// TODO 自动生成的方法存根
+		return new SeqListIterator();
+	}
+	private class SeqListIterator implements Iterator<T>{
+		int pos=-1;
+		@Override
+		public boolean hasNext() {
+			return length-1!=pos;
+		}
+		@SuppressWarnings("unchecked")
+		@Override
+		public T next() {
+			// TODO 自动生成的方法存根
+			return (T) data[++pos];
+		}
 	}
 }

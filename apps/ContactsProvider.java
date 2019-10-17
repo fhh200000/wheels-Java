@@ -18,7 +18,7 @@ public class ContactsProvider {
 		boolean isChecked=false;
 		Scanner sc = new Scanner(System.in);
 		char choice=0;
-		Object data=null;
+		Iterable<Contact> data=null;
 		while(!isChecked) {
 		System.out.println("请选择后端格式：\n1.线性表\n2.排序线性表\n3.链表\n4.排序链表");
 			switch(choice=sc.next().charAt(0)) {
@@ -71,16 +71,9 @@ public class ContactsProvider {
 				break;}
 			case 'Q':case 'q':{
 				System.out.println("当前的数据有：");
-				//将数据保存至SeqList。
-				SeqList<Contact> outdata;
-				if(data instanceof SeqList)
-					outdata = (SeqList<Contact>)data;
-				else {
-					outdata = new SeqList<Contact>(((SingleLinkedList<Contact>)data).toSeqList());
-				}
 				System.out.println("姓名\t电话号码");
-				for(int i=0;i<outdata.size();i++) {
-					System.out.println(outdata.get(i));
+				for(Contact i:data) {
+					System.out.println(i);
 				}
 				
 				
