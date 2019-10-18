@@ -1,10 +1,12 @@
 package test;
 
+import lang.LinkedStack;
+import lang.SeqStack;
 import lang.Stack;
 
 public class StackTester {
 	public static void main(String args[]) {
-		Stack<Integer> teststack = new Stack<Integer>();
+		Stack<Integer> teststack = new LinkedStack<Integer>();
 		teststack.push(1);
 		teststack.push(2);
 		teststack.push(3);
@@ -27,7 +29,7 @@ public class StackTester {
 		}
 		try {
 			System.out.print("Overflow test: ");
-			teststack = new Stack<Integer>(Integer.MAX_VALUE-1);
+			teststack = new SeqStack<Integer>(Integer.MAX_VALUE-1);
 		}
 		catch(Exception ex) {
 			System.out.println(ex.toString());

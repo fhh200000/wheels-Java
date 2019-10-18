@@ -55,6 +55,50 @@ public class Sort {
         //将temp中的元素全部拷贝到原数组中
         System.arraycopy(temp,0,data,begin,end-begin+1);
     }
+	public static void quickSort(Object in) {
+		quickSort(in,false);
+	}
+	@SuppressWarnings("unchecked")
+	public static void quickSort(Object in,boolean reverse) {
+		checkComparable(in);
+		Comparable<Object>[] data = (Comparable<Object>[])in;
+		//调用快速排序主方法
+		quickSort(data,0,data.length-1);
+		if(reverse) {
+			Comparable<Object>[] temp = new Comparable[data.length];
+			for(int i=0;i<data.length;i++)
+				temp[i] = data[data.length-i-1];
+			System.arraycopy(temp, 0, data, 0, temp.length);
+		}
+	}
+	public static void quickSort(Comparable<Object>[] in,int left,int right) {
+		//
+		if(right<left)
+			return;
+		int i = left, j = right;
+		//取最左的数据作为中值。
+		Comparable<Object> tempdata = in[left];
+		while(i<j) {
+			while(i<j&&in[j].compareTo(tempdata)<0)
+				j--;
+			//将数据插入空缺（最左）。
+			if(i < j) {
+				in[i] = in[j];
+				i++;
+			}
+			while(i<j&&in[i].compareTo(tempdata)>=0)
+				i++;
+			if(i < j) {
+				in[j] = in[i];
+				j--;
+			}
+		}
+		//将tempdata填入中间。
+		in[i] = tempdata;
+		//对中值两边的数组分别排序。
+		quickSort(in,left,i-1);
+		quickSort(in,i+1,right);
+	}
 	public static void checkComparable(Object in) {
 		//如果不是数组，那么直接报错
 		if(!(in instanceof Object[]))

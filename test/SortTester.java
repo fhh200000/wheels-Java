@@ -5,6 +5,7 @@ import defs.Contact;
 import lang.Sort;
 
 public class SortTester {
+	static long timeMills=0;
 	static StringBuilder sb = new StringBuilder();
 	public static void main(String[] args) {
 		//测试排序无效的数组
@@ -18,17 +19,20 @@ public class SortTester {
 		//测试排序未实现Comparable接口的数组
 		try {
 			System.out.print("Sorting an array that is not comparable: ");
-			Sort.mergeSort(new Cell[] {new Cell(1,2,3)}, false);
+			Sort.mergeSort(new Cell[] {new Cell(3)}, false);
 		}
 		catch (UnsupportedOperationException ex) {
 			System.out.println(ex);
 		}
-		System.out.println("Merge sorting a normal array:(1,3,-13,233,12,1-312,13,123,434,2,-1,3123,-132)");
-		Integer[] testarray = {1,3,-13,233,12,1-312,13,123,434,2,-1,3123,-132};
+		System.out.println("Merge sorting a normal array:(1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132)");
+		timeMills = System.currentTimeMillis();
+		Integer[] testarray = {1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132};
 		Sort.mergeSort(testarray);
+		timeMills = System.currentTimeMillis()-timeMills;
 		System.out.println(arrayToString(testarray));
+		System.out.printf("finished in %d ms.%n",timeMills);
 		System.out.println("Merge sorting a normal array(reverse):");
-		testarray = new Integer[]{1,3,-13,233,12,1-312,13,123,434,2,-1,3123,-132};
+		testarray = new Integer[]{1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132};
 		Sort.mergeSort(testarray,true);
 		System.out.println(arrayToString(testarray));
 		System.out.println("Merge sorting a class array(Contacts):");
@@ -41,7 +45,27 @@ public class SortTester {
 		};
 		Sort.mergeSort(contacts);
 		System.out.println(arrayToString(contacts));
-		
+		System.out.println("Quick sorting a normal array:(1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132)");
+		timeMills = System.currentTimeMillis();
+		testarray = new Integer[]{1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132};
+		Sort.quickSort(testarray);
+		timeMills = System.currentTimeMillis()-timeMills;
+		System.out.println(arrayToString(testarray));
+		System.out.printf("finished in %d ms.%n",timeMills);
+		System.out.println("Quick sorting a normal array(reverse):");
+		testarray = new Integer[]{1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132};
+		Sort.quickSort(testarray,true);
+		System.out.println(arrayToString(testarray));
+		System.out.println("Quick sorting a class array(Contacts):");
+		contacts = new Contact[] {
+				new Contact("lhb","1231233"),
+				new Contact("fhh","123456"),
+				new Contact("szh","10086"),
+				new Contact("pjh","4008823823"),
+				new Contact("wx","10010"),
+		};
+		Sort.quickSort(contacts);
+		System.out.println(arrayToString(contacts));
 		
 		
 		

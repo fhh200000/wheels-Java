@@ -2,20 +2,18 @@ package apps;
 
 import java.util.Scanner;
 
+import defs.Cell;
+
 public class Maze {
 	public static void main(String args[]) {
 		//创建迷宫数据。
-		char [][] mazearr = 
-			   {{'*','*','*','*','*','*','*','*','*','*'},
-                {'*',' ',' ','*',' ',' ',' ','*',' ','*'},
-                {'*',' ',' ','*',' ',' ',' ','*',' ','*'},
-                {'*',' ',' ',' ',' ','*','*',' ',' ','*'},
-                {'*',' ','*','*','*',' ',' ',' ',' ','*'},
-                {'*',' ',' ',' ','*',' ',' ',' ',' ','*'},
-                {'*',' ','*',' ',' ',' ','*',' ',' ','*'},
-                {'*',' ','*','*','*',' ','*','*',' ','*'},
-                {'*','*',' ',' ',' ',' ',' ',' ',' ','*'},
-                {'*','*','*','*','*','*','*','*','*','*'}}; 
+		Cell[][] mazearr = 
+			   {{new Cell(' '),new Cell('*'),new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*')},
+                {new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*'),new Cell(' '),new Cell('*')},
+                {new Cell('*'),new Cell(' '),new Cell('*'),new Cell(' '),new Cell(' '),new Cell('*')},
+                {new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*'),new Cell('*'),new Cell('*')},
+                {new Cell(' '),new Cell('*'),new Cell('*'),new Cell(' '),new Cell(' '),new Cell(' ')},
+                {new Cell(' '),new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*'),new Cell('*')}};
 		printmenu();
 		System.out.print("请输入您的选择：");
 		Scanner sc = new Scanner(System.in);
@@ -28,11 +26,11 @@ public class Maze {
 			}
 			case 'p':case 'P':{
 				System.out.println("当前存储的迷宫为：");
-				for(char[] i:mazearr) {
-					for(char j:i)
-						System.out.print(j);
-					System.out.println();
-				}
+				//for(char[] i:mazearr) {
+				//	for(char j:i)
+				//		System.out.print(j);
+				//	System.out.println();
+				//}
 			}
 			
 			case 'x':case 'X':{

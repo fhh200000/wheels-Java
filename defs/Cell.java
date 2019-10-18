@@ -1,32 +1,21 @@
 package defs;
 
-public class Cell {
-	private int x,y,value;
+import java.io.Serializable;
+
+public class Cell implements Serializable{
+	private static final long serialVersionUID = 1L;
+	private int value;
 	private boolean isVisited;
-	public Cell(int x, int y, int value) {
+	public Cell(int value) {
 		super();
-		this.x = x;
-		this.y = y;
 		this.value = value;
 		isVisited = false;
-	}
-	public int getX() {
-		return x;
-	}
-	public int getY() {
-		return y;
 	}
 	public int getValue() {
 		return value;
 	}
 	public boolean isVisited() {
 		return isVisited;
-	}
-	public void setX(int x) {
-		this.x = x;
-	}
-	public void setY(int y) {
-		this.y = y;
 	}
 	public void setValue(int value) {
 		this.value = value;
