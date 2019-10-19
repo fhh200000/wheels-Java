@@ -19,7 +19,7 @@ public class SortTester {
 		//测试排序未实现Comparable接口的数组
 		try {
 			System.out.print("Sorting an array that is not comparable: ");
-			Sort.mergeSort(new Cell[] {new Cell(3)}, false);
+			Sort.mergeSort(new Cell[] {new Cell(' ')}, false);
 		}
 		catch (UnsupportedOperationException ex) {
 			System.out.println(ex);

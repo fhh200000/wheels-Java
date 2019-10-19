@@ -10,14 +10,16 @@ import defs.Cell;
 public class MazeGenerator {
 	//迷宫生成器。
 	//将用户输入的数据转换成地图。
-	static Cell[][] mazearr = 
-		{{new Cell(' '),new Cell('*'),new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*')},
-         {new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*'),new Cell(' '),new Cell('*')},
-         {new Cell('*'),new Cell(' '),new Cell('*'),new Cell(' '),new Cell(' '),new Cell('*')},
-         {new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*'),new Cell('*'),new Cell('*')},
-         {new Cell(' '),new Cell('*'),new Cell('*'),new Cell(' '),new Cell(' '),new Cell(' ')},
-         {new Cell(' '),new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*'),new Cell('*')}};
+	
 	public static void main(String args[]) {
+		Cell.setWidth(6);
+		 Cell[][] mazearr = 
+			{{new Cell(' '),new Cell('*'),new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*')},
+	         {new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*'),new Cell(' '),new Cell('*')},
+	         {new Cell('*'),new Cell(' '),new Cell('*'),new Cell(' '),new Cell(' '),new Cell('*')},
+	         {new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*'),new Cell('*'),new Cell('*')},
+	         {new Cell(' '),new Cell('*'),new Cell('*'),new Cell(' '),new Cell(' '),new Cell(' ')},
+	         {new Cell(' '),new Cell(' '),new Cell(' '),new Cell(' '),new Cell('*'),new Cell('*')}};
 		System.out.println("请输入保存的文件名：");
 		Scanner sc = new Scanner(System.in);
 		String filename = sc.next();
