@@ -1,8 +1,6 @@
 package util;
 
 import java.io.Serializable;
-import java.util.Iterator;
-
 import defs.TermX;
 import lang.Node;
 import lang.SortedSeqList;

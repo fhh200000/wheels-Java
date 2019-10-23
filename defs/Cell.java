@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Cell implements Serializable{
 	public static int width=6;
 	public static int currcount=0;
+	private boolean isVisited;
 	private static final long serialVersionUID = 1L;
 	private char value;
 	private int x,y;
@@ -30,9 +31,22 @@ public class Cell implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return new String(new char[]{(char)value});
+		return String.format("%c%d",(char)(y+'A'),x+1);
 	}
 	public static void setWidth(int w) {
 		width = w;
+	}
+	public boolean checkAvail() {
+		/*
+		 * 不可用情形：
+		 * 1.方块已访问。
+		 * 2.方块为'*'。
+		 */
+		boolean result = !(isVisited||value=='*');
+		isVisited=true;
+		return result;
+	}
+	public void reset() {
+		isVisited = false;
 	}
 }

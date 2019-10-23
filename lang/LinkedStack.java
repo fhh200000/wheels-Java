@@ -23,6 +23,7 @@ public class LinkedStack<T> implements Stack<T>{
 			throw new EmptyStackException();
 		T ret = end.data;
 		end = end.prev;
+		data.removetail();
 		size--;
 		return ret;
 	}
@@ -37,11 +38,19 @@ public class LinkedStack<T> implements Stack<T>{
 		return size;
 	}
 	/* 遍历操作： 若栈非空，遍历栈中所有元素  */
+	@Override
     public String toString() {
     	StringBuilder sb = new StringBuilder("(");
     	for(T i:data)
     		sb.append(i+",");
     	sb.replace(sb.length()-1,sb.length(),")");
     	return sb.toString();
-    };
+    }
+	@Override
+	public void clear() {
+		this.end = data.head;
+		this.data.clear();
+		this.size=0;
+		
+	};
 }

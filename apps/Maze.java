@@ -1,5 +1,10 @@
 package apps;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Scanner;
 
 import defs.Cell;
@@ -43,11 +48,15 @@ public class Maze {
 					if(currrow>91)
 						currrow = 97;
 					for(Cell j:i)
-						System.out.print(j+" ");
+						System.out.print(j.getValue()+" ");
 					System.out.println();
 				}
 				break;
 			}	
+			case 'r':case 'R':{
+				clear();
+				break;
+			}
 			case 'x':case 'X':{
 				break loop;
 			}
@@ -80,20 +89,89 @@ public class Maze {
 					System.out.println("尚未设置起点/终点，不能计算！");
 					break;
 				}
+				//如果有上一次的计算结果，清空。
+				clear();
 				//传入主方法。
-				if(checkStep(mazearr[starty][startx],mazearr[endy][endx],0)) {
-					System.out.println("求解成功！");
-					while(steps.size()>0)
-						steps.pop().setValue('+');
+				if(checkStep(mazearr[starty][startx],mazearr[endy][endx])) {
+					System.out.print("求解成功！\n步骤为:");
+					System.out.println(steps);
 				}
 				else
 					System.out.println("求解失败！");
+				break;
+			}
+			case 'I':case 'i':{
+				//当前版本中，只允许将数据文件保存至程序运行目录。
+				File filelist = new File(System.getProperty("java.class.path"));
+				String[] currfiles = filelist.list();
+				System.out.println("当前存储的文件有：");
+				String[] split;
+				//列出所有文件
+				for(String i:currfiles) {
+					split = i.split("\\.");
+					if(split[split.length-1].equals("maze")) {
+							System.out.print(i.substring(0,i.length()-5));
+						System.out.println();
+					}
+				}
+				System.out.println("请输入您希望读取的文件名：");
+				String filename = sc.next();
+				File outfile = new File(System.getProperty("java.class.path")+"/"+filename+".maze");
+				while(!outfile.exists()) {
+					System.out.println("输入的文件不存在！\n请输入您希望读取的文件名：");
+					filename = sc.next();
+					outfile = new File(System.getProperty("java.class.path")+"/"+filename+".maze");
+				}
+				
+				try {
+					ObjectInputStream ois = new ObjectInputStream(new FileInputStream(outfile));
+					mazearr = (Cell[][])(ois.readObject());
+					ois.close();
+					System.out.println("读取成功！");
+				}
+				catch(Exception ex) {
+					ex.printStackTrace();
+				}
+				break;
+			}
+			case 'S':case 's':{
+				//当前版本中，只允许将数据文件保存至程序运行目录。
+				File filelist = new File(System.getProperty("java.class.path"));
+				String[] currfiles = filelist.list();
+				System.out.println("当前存储的文件有：");
+				String[] split;
+				//列出所有文件
+				for(String i:currfiles) {
+					split = i.split("\\.");
+					if(split[split.length-1].equals("maze")) {
+							System.out.print(i.substring(0,i.length()-5));
+						System.out.println();
+					}
+				}
+				System.out.println("请输入您希望保存的文件名：");
+				String filename = sc.next();
+				ObjectOutputStream oos;
+				try {
+					oos = new ObjectOutputStream(new FileOutputStream(System.getProperty("java.class.path")+"/"+filename+".maze"));
+					oos.writeObject(mazearr);
+					oos.flush();
+					oos.close();
+				}
+				catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				System.out.println("保存成功！");
+				break;
 			}
 			}
 		System.out.print("请输入您的选择：");
 		}
 		sc.close();
 	}
+	/*
+	 * 使用递归的实现版本。
+	 * 
+
 	public static boolean checkStep(Cell curr,Cell end,int offset) {
 		boolean result=false;
 		//如果到达了终点，那么返回true。
@@ -108,10 +186,7 @@ public class Maze {
 		 * 0000XXXX
 		 * xxxxWSAD
 		 * 为前一方块相对于这一方块的偏移。
-		 */
-		Cell prev = steps.peek();
-		if(prev==null)
-			prev = curr;
+		 *
 		steps.push(curr);
 		if((offset&4)==0&&curr.getY()>0)
 			result=checkStep(mazearr[curr.getY()-1][curr.getX()],end,8);
@@ -125,6 +200,37 @@ public class Maze {
 			steps.pop();
 		return result;
 	}
+*/
+	//现在，我们将它改变为使用栈的版本。
+	public static boolean checkStep(Cell start,Cell end) {
+		//将起始方块设为“已访问”。
+		start.checkAvail();
+		//将首个元素入栈。
+		steps.push(start);
+		Cell peek;
+		while(steps.peek()!=end&&steps.size()!=0) {
+			peek = steps.peek();
+			if(peek.getX()>0&&mazearr[peek.getY()][peek.getX()-1].checkAvail()) {
+				steps.push(mazearr[peek.getY()][peek.getX()-1]);
+				continue;
+			}
+			if(peek.getX()<mazearr[0].length-1&&mazearr[peek.getY()][peek.getX()+1].checkAvail()) {
+				steps.push(mazearr[peek.getY()][peek.getX()+1]);
+				continue;
+			}
+			if(peek.getY()>0&&mazearr[peek.getY()-1][peek.getX()].checkAvail()) {
+				steps.push(mazearr[peek.getY()-1][peek.getX()]);
+				continue;
+			}
+			if(peek.getY()<mazearr.length-1&&mazearr[peek.getY()+1][peek.getX()].checkAvail()) {
+				steps.push(mazearr[peek.getY()+1][peek.getX()]);
+				continue;
+			}
+			//如果都不满足，那么弹出自身。
+			steps.pop();
+		}
+		return steps.size()!=0;
+	}
 	public static void printmenu() {
 		System.out.println(
 				  "欢迎使用迷宫求解系统\n"
@@ -132,10 +238,18 @@ public class Maze {
 				+ "m:显示此菜单。\n"
 				+ "f:标识起点和终点。\n"
 				+ "c:开始路径运算。\n"
+				+ "r:重置运算结果。\n"
 				+ "p:显示当前迷宫状态。\n"
 				+ "i:导入迷宫存储文件。\n"
 				+ "s:保存迷宫为本地文件。\n"
 				+ "x:退出程序。\n"
 				+ "默认迷宫数据已加载。");
+	}
+	public static void clear() {
+		if(steps.size()>0)
+			steps.clear();
+		for(Cell[] i:mazearr)
+			for(Cell j:i)
+				j.reset();
 	}
 }

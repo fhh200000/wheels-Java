@@ -6,6 +6,7 @@ public interface Stack<T>{
 	public T pop();
 	public T peek();
 	public int size();
+	public void clear();
 	/* 遍历操作： 若栈非空，遍历栈中所有元素  */
 }
 class StackOverflowException extends RuntimeException{

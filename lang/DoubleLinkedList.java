@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 public class DoubleLinkedList<T> implements Iterable<T>/*使用迭代器*/ {
 	Node<T> head;
+	Node<T> tail;
 	public DoubleLinkedList() {
 		this.head = new Node<T>();
 	}
@@ -14,6 +15,7 @@ public class DoubleLinkedList<T> implements Iterable<T>/*使用迭代器*/ {
 			curr.next = new Node<T>(i,curr,null);
 			curr = curr.next;
 		}
+		this.tail = curr;
 	}
 	public DoubleLinkedList(DoubleLinkedList<T> in) {
 		this(in.toSeqList().toArray());
@@ -86,6 +88,7 @@ public class DoubleLinkedList<T> implements Iterable<T>/*使用迭代器*/ {
 		for(int i=0;i<pos&&curr.next!=null;i++)
 			curr = curr.next;
 		curr.next = new Node<T>(data,curr,curr.next);
+		this.tail = curr.next;
 		return curr.next;
 	}
 	public Node<T> append(T data) {
@@ -110,7 +113,14 @@ public class DoubleLinkedList<T> implements Iterable<T>/*使用迭代器*/ {
 		return null;
 	}
 	public void clear() {
+		head.next.prev = null;
 		head.next = null;
+		
+	}
+	public void removetail() {
+		tail = tail.prev;
+		tail.next.prev = null;
+		tail.next = null;
 	}
 	public Node<T> search(T key){
 		if(key==null)
@@ -167,6 +177,7 @@ public class DoubleLinkedList<T> implements Iterable<T>/*使用迭代器*/ {
 		@Override
 		public void remove() {
 			curr.prev.next = curr.next;
+			curr.prev = null;
 		}
 	}
 }

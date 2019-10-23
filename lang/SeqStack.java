@@ -60,5 +60,10 @@ public class SeqStack<T> implements Stack<T> {
     		sb.append(stackdata[i]+",");
     	sb.replace(sb.length()-1,sb.length(),")");
     	return sb.toString();
-    };
+    }
+	@Override
+	public void clear() {
+		// TODO 自动生成的方法存根
+		stacksize=0;
+	};
 }

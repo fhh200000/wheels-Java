@@ -107,4 +107,53 @@ public class Sort {
 		if(!((Object[])in instanceof Comparable[]))
 			throw new UnsupportedOperationException("Sorting a not comparable array:"+in.getClass());
 	}
+	public static void shellSort(Object in) {
+		shellSort(in,false);
+	}
+	@SuppressWarnings("unchecked")
+	public static void shellSort(Object in,boolean reverse) {
+		checkComparable(in);
+		Comparable<Object>[] data = (Comparable<Object>[])in;
+		for(int range=data.length/2;range>0;range/=2) {
+			for(int i=range;i<data.length;i++) {
+				Comparable<Object> temp = data[i];
+				int j;
+				for(j=i-range;j>=0&&temp.compareTo(data[j])*(reverse?-1:1)>0;j-=range)
+					data[j+range] = data[j];
+				data[j+range] = temp;
+			}
+		}
+	}
+	public static void heapSort(Object in) {
+		heapSort(in,false);
+	}
+	@SuppressWarnings("unchecked")
+	public static void heapSort(Object in,boolean reverse) {
+		checkComparable(in);
+		Comparable<Object>[] data = (Comparable<Object>[])in;
+		for(int i=data.length/2-1;i>=0;i--)
+			sift(data,i,data.length-1,reverse);
+		for(int i=data.length-1;i>0;i--) {
+			Comparable<Object> temp = data[i];
+			data[i] = data[0];
+			data[0] = temp;
+			sift(data,0,i-1,reverse);
+		}
+	}
+	public static void sift(Comparable<Object>[] keys,int parent,int end,boolean reverse) {
+		int child=2*parent+1;
+		Comparable<Object> value=keys[parent];
+		while(child<=end) {
+			if(child<end&&keys[child].compareTo(keys[child+1])*(reverse?-1:1)>0)
+				child++;
+			if(value.compareTo(keys[child])*(reverse?-1:1)>0) {
+				keys[parent] = keys[child];
+				parent = child;
+				child = 2*parent+1;
+			}
+			else
+				break;
+		}
+		keys[parent] = value;
+	}
 }

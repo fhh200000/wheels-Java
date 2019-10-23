@@ -38,5 +38,6 @@ public class MazeGenerator {
 		catch(Exception ex) {
 			ex.printStackTrace();
 		}
+		sc.close();
 	}
 }

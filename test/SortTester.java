@@ -66,7 +66,48 @@ public class SortTester {
 		};
 		Sort.quickSort(contacts);
 		System.out.println(arrayToString(contacts));
-		
+		System.out.println("Shell sorting a normal array:(1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132)");
+		timeMills = System.currentTimeMillis();
+		testarray = new Integer[]{1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132};
+		Sort.shellSort(testarray);
+		timeMills = System.currentTimeMillis()-timeMills;
+		System.out.println(arrayToString(testarray));
+		System.out.printf("finished in %d ms.%n",timeMills);
+		System.out.println("Shell sorting a normal array(reverse):");
+		testarray = new Integer[]{1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132};
+		Sort.shellSort(testarray,true);
+		System.out.println(arrayToString(testarray));
+		System.out.println("Shell sorting a class array(Contacts):");
+		contacts = new Contact[] {
+				new Contact("lhb","1231233"),
+				new Contact("fhh","123456"),
+				new Contact("szh","10086"),
+				new Contact("pjh","4008823823"),
+				new Contact("wx","10010"),
+		};
+		Sort.shellSort(contacts);
+		System.out.println(arrayToString(contacts));
+		System.out.println("Heap sorting a normal array:(1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132)");
+		timeMills = System.currentTimeMillis();
+		testarray = new Integer[]{1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132};
+		Sort.heapSort(testarray);
+		timeMills = System.currentTimeMillis()-timeMills;
+		System.out.println(arrayToString(testarray));
+		System.out.printf("finished in %d ms.%n",timeMills);
+		System.out.println("Heap sorting a normal array(reverse):");
+		testarray = new Integer[]{1,3,-13,233,12,-311,13,123,434,2,-1,3123,-132};
+		Sort.heapSort(testarray,true);
+		System.out.println(arrayToString(testarray));
+		System.out.println("Heap sorting a class array(Contacts):");
+		contacts = new Contact[] {
+				new Contact("lhb","1231233"),
+				new Contact("fhh","123456"),
+				new Contact("szh","10086"),
+				new Contact("pjh","4008823823"),
+				new Contact("wx","10010"),
+		};
+		Sort.heapSort(contacts);
+		System.out.println(arrayToString(contacts));
 		
 		
 		
