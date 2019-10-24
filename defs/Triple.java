@@ -8,10 +8,35 @@ import lang.Addible;
 public class Triple<T> implements Comparable<Triple<T>>,Addible<Triple<T>>{
 	int row,column;
 	T value;
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	public boolean add(Triple<T> x) {
-		
-		return false;
+		//如果不能相加，那么直接抛出异常
+		if(!(x.value instanceof Number)&&!(x.value instanceof Addible))
+			throw new UnsupportedOperationException("Not an addible Type.");
+		if(x.column!=column)
+			return false;
+		if(value instanceof Number) {
+			if(value instanceof Double) {
+				value = (T) new Double((Double)value+(Double)x.value);
+		    } else if(value instanceof Float) {
+		    	value = (T) new Float((Float)value+(Float)x.value);
+		    } else if(value instanceof Long) {
+		    	value = (T) new Long((Long)value+(Long)x.value);
+		    } else if(value instanceof Integer) {
+		    	value = (T) new Integer((Integer)value+(Integer)x.value);
+		    }
+		    else if(value instanceof Byte) {
+		    	value = (T) new Byte((byte) ((Byte)value+(Byte)x.value));
+		    }
+		    else if(value instanceof Short) {
+		    	value = (T) new Short((short) ((Short)value+(Short)x.value));
+		    }
+		}
+		else { //Addible
+			((Addible<T>)value).add(x.value);
+		}
+		return true;
 	}
 	public Triple(int row,int column,T value) {
 		if(row<0||column<0)
@@ -47,6 +72,8 @@ public class Triple<T> implements Comparable<Triple<T>>,Addible<Triple<T>>{
 			else //java.lang.Float/Double
 				return Math.abs(((Number)value).doubleValue())<0.0000001;
 		}
+		if(value instanceof Addible)
+			return ((Addible<?>) value).removable();
 		return value==null;
 	}
 

@@ -38,6 +38,9 @@ public class MatrixTester {
 			System.out.print(ex);
 		}
 		System.out.println();
+		System.out.println("Trying to Add a Matrix: ");
+		matrix.add(matrix);
+		System.out.println(matrix);
 	}
 
 }

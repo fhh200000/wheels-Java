@@ -1,6 +1,7 @@
 package lang;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 import defs.Triple;
 
@@ -93,5 +94,37 @@ public class SeqMatrix implements Serializable{
 			sb.append("|\n");
 		}
 		return sb.toString();
+	}
+	/*
+	 * 矩阵的AddAll实现。
+	 * 由于没有实现书本上的相关接口，此处需要重新实现AddAll方法。
+	 * 为了偷懒，此处使用迭代器简化代码量。
+	 */
+	public void add(SeqMatrix in) {
+		//对两个多项式对象进行遍历。O(n²)
+		//这里使用迭代器进行操作。
+		for(int i=0;i<rowlist.length;i++) {
+			SortedSeqList<Triple<Integer>> thisrow = rowlist.get(i);
+			SortedSeqList<Triple<Integer>> inrow = in.rowlist.get(i);
+			Iterator<Triple<Integer>> inIter = inrow.iterator();
+		out:while(inIter.hasNext()) {
+				Triple<Integer> inData = inIter.next();
+				Iterator<Triple<Integer>> outIter = thisrow.iterator();
+				while(outIter.hasNext()) {
+					if(outIter.next().add(inData)) 
+						continue out;
+				}
+				//没有匹配的项目，将该项目添加到主链。
+				thisrow.append(inData);
+			}
+		}
+		//完成后，对多项式进行去0操作。
+		trim();
+	}
+	public void trim() {
+		for(SortedSeqList<Triple<Integer>> row:rowlist)
+			for(Triple<Integer> i:row)
+				if(i.removable())
+					row.remove(i);
 	}
 }
