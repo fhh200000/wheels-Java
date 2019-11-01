@@ -14,7 +14,7 @@ public class Triple<T> implements Comparable<Triple<T>>,Addible<Triple<T>>{
 		//如果不能相加，那么直接抛出异常
 		if(!(x.value instanceof Number)&&!(x.value instanceof Addible))
 			throw new UnsupportedOperationException("Not an addible Type.");
-		if(x.column!=column)
+		if(x.column!=column||x.row!=row)
 			return false;
 		if(value instanceof Number) {
 			if(value instanceof Double) {
@@ -90,7 +90,7 @@ public class Triple<T> implements Comparable<Triple<T>>,Addible<Triple<T>>{
 	public int compareTo(Triple<T> arg0) {
 		if(this.row==arg0.row&&this.column==arg0.column)
 			return 0;
-		return (this.row<arg0.row||this.row==arg0.row&&this.column<arg0.column)?1:-1;
+		return (this.row<arg0.row||this.row==arg0.row&&this.column<arg0.column)?-1:1;
 	}
 	public Triple<T> toSymmetry() {
 		return new Triple<T>(this.column,this.row,this.value);

@@ -9,12 +9,12 @@ public class MatrixTester {
 		@SuppressWarnings("unchecked")
 		Triple<Integer>[] testdata= new Triple[] {
 				new Triple<Integer>(0,0,3),
-				new Triple<Integer>(2,4,8),
+				new Triple<Integer>(2,3,8),
 				new Triple<Integer>(0,2,9),
 				new Triple<Integer>(3,1,3),
-				new Triple<Integer>(4,0,4)};
+				new Triple<Integer>(3,0,4)};
 		//创建矩阵。
-		SeqMatrix matrix = new SeqMatrix(5,5,testdata);
+		SeqMatrix matrix = new SeqMatrix(5,4,testdata);
 		System.out.println("Created Matrix:");
 		System.out.println(matrix);
 		//更改元素值。
@@ -41,6 +41,13 @@ public class MatrixTester {
 		System.out.println("Trying to Add a Matrix: ");
 		matrix.add(matrix);
 		System.out.println(matrix);
+		System.out.println("Fast Transposing a matrix: ");
+		matrix.fastTranspose();
+		System.out.println(matrix);
+		System.out.println("Fast Transposing a matrix (Again!): ");
+		matrix.fastTranspose();
+		System.out.println(matrix);
+		System.out.println("Finished test.");
 	}
 
 }

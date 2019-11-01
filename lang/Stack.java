@@ -1,7 +1,6 @@
 package lang;
 
-
-public interface Stack<T>{
+public interface Stack<T> {
 	public void push(T indata);
 	public T pop();
 	public T peek();

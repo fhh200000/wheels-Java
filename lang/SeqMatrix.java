@@ -7,16 +7,15 @@ import defs.Triple;
 
 public class SeqMatrix implements Serializable{
 	private static final long serialVersionUID = 1L;
+	private SeqList<Triple<Integer>> data;
 	private int rows,columns;
-	private SeqList<SortedSeqList<Triple<Integer>>> rowlist;
 	public SeqMatrix(int rows,int columns) {
 		if(rows<=0||columns<=0)
 			throw new UnsupportedOperationException("Zero or negative size");
 		this.rows = rows;
 		this.columns = columns;
-		this.rowlist = new SeqList<>(rows);
-		for(int i=0;i<rows;i++)
-			rowlist.append(new SortedSeqList<>());
+		//压缩算法，不需要预先分配所有的内存空间
+		this.data = new SortedSeqList<>();
 	}
 	public SeqMatrix(int rows) {
 		this(rows,rows);
@@ -40,7 +39,7 @@ public class SeqMatrix implements Serializable{
 	public void set(Triple<Integer> in) {
 		/*
 		 * 对教材代码的重写版本。
-		 * 如果数字为“0”，则直接不插入。
+		 * 如果数字为“0”，则视为删除该位置的数据。
 		 * 如果查找结果存在，则覆盖。
 		 * 如果查找结果不存在，则尾部插入。
 		 */
@@ -50,35 +49,33 @@ public class SeqMatrix implements Serializable{
 		int realcolumn = getRealPos(in.getRow(),in.getColumn());
 		if(in.removable()) { //插入数值无效
 			if(realcolumn!=-1) //设置位置有效
-				rowlist.get(in.getRow()).remove(realcolumn);
+				data.remove(realcolumn);
 			return;
 		}
 		else { //插入数值有效
 			if(realcolumn!=-1)
-				rowlist.get(in.getRow()).set(realcolumn, in);
+				data.set(realcolumn,in);
 			else
-				rowlist.get(in.getRow()).append(in);
+				data.append(in);
 		}
+	}
+	public int getRealPos(int row,int column) {
+		int i=0;
+		while(i<data.size()&&(data.get(i).getColumn()!=column||data.get(i).getRow()!=row))
+			i++;
+		if(i==data.size())
+			i = -1;
+		return i;
 	}
 	public int get(int row,int column) {
 		if(row<0||row>=rows|column<0||column>=columns)
 			throw new ArrayIndexOutOfBoundsException("("+row+","+column+")");
-		SortedSeqList<Triple<Integer>> currrow = rowlist.get(row);
 		int result=getRealPos(row,column);
 		if(result==-1)
 			result=0;
 		else
-			result=currrow.get(result).getValue();
+			result=data.get(result).getValue();
 		return result;
-	}
-	public int getRealPos(int row,int column) {
-		SortedSeqList<Triple<Integer>> currrow = rowlist.get(row);
-		int i=0;
-		while(i<currrow.size()&&currrow.get(i).getColumn()!=column)
-			i++;
-		if(i==currrow.size())
-			i = -1;
-		return i;
 	}
 	@Override
 	public String toString() {
@@ -95,36 +92,57 @@ public class SeqMatrix implements Serializable{
 		}
 		return sb.toString();
 	}
-	/*
-	 * 矩阵的AddAll实现。
-	 * 由于没有实现书本上的相关接口，此处需要重新实现AddAll方法。
-	 * 为了偷懒，此处使用迭代器简化代码量。
-	 */
 	public void add(SeqMatrix in) {
-		//对两个多项式对象进行遍历。O(n²)
-		//这里使用迭代器进行操作。
-		for(int i=0;i<rowlist.length;i++) {
-			SortedSeqList<Triple<Integer>> thisrow = rowlist.get(i);
-			SortedSeqList<Triple<Integer>> inrow = in.rowlist.get(i);
-			Iterator<Triple<Integer>> inIter = inrow.iterator();
+		Iterator<Triple<Integer>> inIter = in.data.iterator();
 		out:while(inIter.hasNext()) {
-				Triple<Integer> inData = inIter.next();
-				Iterator<Triple<Integer>> outIter = thisrow.iterator();
+			Triple<Integer> inData = inIter.next();
+				Iterator<Triple<Integer>> outIter = this.data.iterator();
 				while(outIter.hasNext()) {
 					if(outIter.next().add(inData)) 
 						continue out;
 				}
 				//没有匹配的项目，将该项目添加到主链。
-				thisrow.append(inData);
+				this.data.append(inData);
 			}
-		}
-		//完成后，对多项式进行去0操作。
-		trim();
+			//完成后，对多项式进行去0操作。
+			trim();
 	}
 	public void trim() {
-		for(SortedSeqList<Triple<Integer>> row:rowlist)
-			for(Triple<Integer> i:row)
+			for(Triple<Integer> i:data)
 				if(i.removable())
-					row.remove(i);
+					data.remove(i);
+	}
+	/*
+	 * 矩阵的快速转置。
+	 * 由于排序顺序表无法指定插入位置(不具有随机写能力)，这里采用数组进行临时转储。
+	 */
+	@SuppressWarnings("unchecked")
+	public void fastTranspose() {
+		Triple<Integer>[] newdata = new Triple[data.length]; 
+		//记录每一列的长度。
+		int[] columnlength = new int[columns];
+		for(Triple<Integer> i:data)
+			columnlength[i.getColumn()]++;
+		//记录每一列(新行)的开始位置。
+		int[] columnstartpos = new int[columns];
+		for(int i=1;i<columns;i++) 
+			columnstartpos[i]=columnstartpos[i-1]+columnlength[i-1];
+		//开始转换。
+		for(Triple<Integer> i:data) {
+			newdata[columnstartpos[i.getColumn()]] = i.toSymmetry();
+			columnstartpos[i.getColumn()]++;
+		}
+		
+		/*
+		 * 将转置完成的矩阵赋值给原数据。
+		 * 由于我们十分确定原数组已经经过排序，此时可以采用特殊方法，将排序过的数据直接放回排序线性表。
+		 * 此操作较为危险。
+		 */
+		//首先，我们交换行列长度。
+		int tmp = rows;
+		rows = columns;
+		columns = tmp;
+		//然后，我们强行将数据置入。
+		data.data = newdata;
 	}
 }
