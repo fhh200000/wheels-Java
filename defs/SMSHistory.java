@@ -11,7 +11,19 @@ public class SMSHistory {
 	private String sourcename,targetname;
 	//由于短信只能发送文字（MMS才能发送特殊数据），此处在这里将数据类型设置成String.
 	private String message;
-	
+	public SMSHistory(Date time, String source, String target,String message) {
+		super();
+		this.time = time;
+		this.sourcename = this.source = source;
+		this.targetname = this.target = target;
+		this.message = message;
+	}
+	public SMSHistory(String source, String target,String message) {
+		this(new Date(),source,target,message);
+	}
+	public String getTimeString() {
+		return dateformat.format(time);
+	}
 	public Date getTime() {
 		return time;
 	}
@@ -35,6 +47,10 @@ public class SMSHistory {
 	}
 	public void setTargetname(String targetname) {
 		this.targetname = targetname;
+	}
+	@Override 
+	public String toString() {
+		return String.format("%s\t%s\t%s\t%s", getTimeString(),sourcename,targetname,message);
 	}
 	public static final DateFormat dateformat = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,DateFormat.MEDIUM, Locale.CHINA);
 	public static final Comparator<SMSHistory> SortByDate = new SMSDateComparator();
