@@ -1,15 +1,17 @@
 package lang;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class SeqList<T> implements Serializable,Iterable<T> /*支持序列化从而实现导入/导出*/{
 	private static final long serialVersionUID = 1L;
-	protected Object[] data; 
+	protected T[] data; 
 	private static final int DEFAULT_LENGTH = 64; /*默认长度为64位*/
 	int length;
+	@SuppressWarnings("unchecked")
 	public SeqList(int len){
-		this.data = new Object[len];
+		this.data = (T[])new Object[len];
 		this.length = 0;
 	}
 	public SeqList() {
@@ -31,7 +33,6 @@ public class SeqList<T> implements Serializable,Iterable<T> /*支持序列化从
 	public int size() {
 		return this.length;
 	}
-	@SuppressWarnings("unchecked")
 	public T get(int pos) {
 		if(pos<0||pos>length)
 			return null;
@@ -85,7 +86,8 @@ public class SeqList<T> implements Serializable,Iterable<T> /*支持序列化从
 			return pos;
 		}
 		/*分配新数组*/
-		Object[] newdata = new Object[this.length+1];
+		@SuppressWarnings("unchecked")
+		T[] newdata = (T[])new Object[this.length+1];
 		/*将头部数据复制进新数组*/
 		System.arraycopy(data, 0, newdata, 0, pos);
 		newdata[pos] = indata;
@@ -145,11 +147,31 @@ public class SeqList<T> implements Serializable,Iterable<T> /*支持序列化从
 		public boolean hasNext() {
 			return length-1!=pos;
 		}
-		@SuppressWarnings("unchecked")
 		@Override
 		public T next() {
 			// TODO 自动生成的方法存根
 			return (T) data[++pos];
 		}
+	}
+	/*
+	 * 仿照Java的Collections.sort(Comparator)，实现依据比较器排序功能。
+	 * 使用Shell排序算法进行数据排序。
+	 */
+	public void sort(Comparator<T> method) {
+		for(int range=length/2;range>0;range/=2) {
+			for(int i=range;i<length;i++) {
+				T temp = data[i];
+				int j;
+				for(j=i-range;j>=0&&method.compare(temp,data[j])<0;j-=range)
+					data[j+range] = data[j];
+				data[j+range] = temp;
+			}
+		} 
+	}
+	//同时，提供不传入比较器的Comparable排序。
+	public void sort() {
+		T[] tmp = toArray();
+		Sort.mergeSort(tmp);
+		System.arraycopy(tmp, 0, data, 0, length);
 	}
 }
