@@ -24,7 +24,6 @@ public class CallSMSHistoryProvider {
 		CallHistoryList call = new CallHistoryList();
 		sc = new Scanner(System.in);
 		SeqList<Contact> contacts = null;
-		
 		//首先，我们导入通讯录。
 		//当前版本中，只允许将数据文件保存至程序运行目录。
 		File filelist = new File(System.getProperty("java.class.path"));
@@ -71,6 +70,18 @@ public class CallSMSHistoryProvider {
 				selection = chooseCallSMS();
 				break;
 			}
+			case 'n':case 'N':{
+				if(selection==1) {
+					System.out.println("正在插入一条通话记录");
+					call.addHistory(new CallHistory(sc.next(),sc.next()));
+				}
+				else {
+					System.out.println("正在插入一条短信记录");
+					sms.addHistory(new SMSHistory(sc.next(),sc.next(),sc.next()));
+				}
+				System.out.println("插入成功！");
+				break;
+			}
 			case 'c':case 'C':{
 				int result=chooseEntry()-1;
 				if(selection==1)
@@ -78,6 +89,25 @@ public class CallSMSHistoryProvider {
 				else
 					sms.changeSMS(SMSHistoryList.Choice.values()[result]);
 				System.out.println("切换成功！");
+				break;
+			}
+			case 'p':case 'P':{
+				//排序。
+				Comparator<?> method = chooseComparator();
+				if(selection==1)
+					call.sort((Comparator<CallHistory>)method);
+				else
+					sms.sort((Comparator<SMSHistory>)method);
+				//显示。
+				SeqList<?> result = selection==1?call.getCurrHistory():sms.getCurrHistory();
+				for(Object i:result)
+					System.out.println(i);
+				break;
+			}
+			case 'd':case 'D':{
+				System.out.println("当前加载的通讯录有：");
+				for(Contact i:contacts)
+					System.out.println(i);
 				break;
 			}
 			case 'x':case 'X':{
@@ -92,11 +122,10 @@ public class CallSMSHistoryProvider {
 		System.out.println(
 				  "欢迎使用通话记录/短信记录管理系统\n"
 				+ "输入功能入口前的序号即可执行对应操作。\n"
-				+ "s:保存通话记录/短信记录。\n"
-				+ "o:读取通话记录/短信记录。\n"
+				+ "m:显示此菜单。\n"
 				+ "p:输出排序后的通话记录/短信记录。\n"
 				+ "c:切换入口(未接/已接/呼出)。\n"
-				+ "d:删除通话记录/短信记录。\n"
+				+ "d:显示联系人。\n"
 				+ "q:切换通话记录/短信记录。\n"
 				+ "n:添加通话记录/短信记录。\n"
 				+ "x:退出程序。");

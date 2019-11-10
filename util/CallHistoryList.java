@@ -7,6 +7,7 @@ import java.util.Map;
 
 import defs.CallHistory;
 import defs.Contact;
+import defs.SMSHistory;
 import lang.SeqList;
 
 public class CallHistoryList implements Serializable {
@@ -69,5 +70,15 @@ public class CallHistoryList implements Serializable {
 	 */
 	public void sort(Comparator<CallHistory> method) {
 		selectCalls.sort(method);
+	}
+	public void addHistory(CallHistory in) {
+		String name;
+		//首先，我们将姓名替换到记录中。
+		if((name=nameMapping.get(in.getSource()))!=null)
+			in.setSourcename(name);
+		if((name=nameMapping.get(in.getTarget()))!=null)
+			in.setTargetname(name);
+		//然后，我们将数据添加到列表中。
+		selectCalls.append(in);
 	}
 }
