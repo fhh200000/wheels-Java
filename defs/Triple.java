@@ -1,11 +1,14 @@
 package defs;
+import java.io.Serializable;
+
 import lang.Addible;
 /*
  * 对书本上的三元组的扩展写法。
  * 书本上的三元组仅支持标准类型（int）。
  * 此处将三元组扩展。 
  */
-public class Triple<T> implements Comparable<Triple<T>>,Addible<Triple<T>>{
+public class Triple<T> implements Comparable<Triple<T>>,Addible<Triple<T>>,Serializable{
+	private static final long serialVersionUID = 1035324790729581519L;
 	int row,column;
 	T value;
 	@SuppressWarnings({ "unchecked", "deprecation" })

@@ -9,6 +9,8 @@ public class SeqMatrix implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private SeqList<Triple<Integer>> data;
 	private int rows,columns;
+	public int defaultValue = 0;
+	public int defaultCrossValue=0;
 	public SeqMatrix(int rows,int columns) {
 		if(rows<=0||columns<=0)
 			throw new UnsupportedOperationException("Zero or negative size");
@@ -21,8 +23,6 @@ public class SeqMatrix implements Serializable{
 		this(rows,rows);
 	}
 	public SeqMatrix(int rows,int columns,Triple<Integer>[] data) {
-		/*
-		 */
 		this(rows,columns);
 		for(Triple<Integer> i:data)
 			set(i);
@@ -72,7 +72,10 @@ public class SeqMatrix implements Serializable{
 			throw new ArrayIndexOutOfBoundsException("("+row+","+column+")");
 		int result=getRealPos(row,column);
 		if(result==-1)
-			result=0;
+			if(row==column)
+				result=defaultCrossValue;
+			else
+				result=defaultValue;
 		else
 			result=data.get(result).getValue();
 		return result;
@@ -144,5 +147,14 @@ public class SeqMatrix implements Serializable{
 		columns = tmp;
 		//然后，我们强行将数据置入。
 		data.data = newdata;
+	}
+	//扩充矩阵大小。
+	public void expand(int rows,int columns) {
+		this.rows = rows;
+		this.columns = columns;
+	}
+	//直接拿走数据。
+	public SeqList<Triple<Integer>> getRawData(){
+		return data;
 	}
 }
